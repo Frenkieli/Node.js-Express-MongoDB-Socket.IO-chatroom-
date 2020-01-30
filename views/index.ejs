@@ -8,25 +8,18 @@
 
 <body>
   <div class="chats">
-    <div class="chat">
-      <div class="group">
-        <div class="name">Robby：</div>
-        <div class="msg">Hi~</div>
-      </div>
-      <div class="time">11分鐘前</div>
-    </div>
-    <div class="chat">
-      <div class="group">
-        <div class="name">Robby：</div>
-        <div class="msg">Hola~</div>
-      </div>
-      <div class="time">10分鐘前</div>
-    </div>
   </div>
   <div class="message">
     <input id="name" type="text" value="Robby" placeholder="your name" />
     <input id="msg" type="text" placeholder="input the message" />
     <button type="button">送出</button>
+  </div>
+  <div>
+    <form action="/updata" method="post" enctype="multipart/form-data">
+      <h2>單圖上傳</h2>
+      <input type="file" name="logo" multiple>
+      <input type="submit" value="提交">
+    </form>
   </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js'></script>

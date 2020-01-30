@@ -6,7 +6,7 @@ class SocketHander {
     this.db;
   }
   connect() {
-    this.db = require('mongoose').connect('mongodb://localhost:27017/chat');
+    this.db = require('mongoose').connect('mongodb://localhost:27017/chat', { useNewUrlParser: true , useUnifiedTopology: true});
     this.db.Promise = global.Promise;
   }
 

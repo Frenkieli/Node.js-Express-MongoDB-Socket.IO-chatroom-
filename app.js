@@ -7,13 +7,16 @@ var sassMiddleware = require('node-sass-middleware');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var updataRouter = require('./routes/updata');
 
 var app = express();
 
+// 聊天室功能
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const SocketHander = require('./socket/index');
+
 
 io.on('connection', async (socket) => {
   console.log('a user connected');
@@ -64,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/updata', updataRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
