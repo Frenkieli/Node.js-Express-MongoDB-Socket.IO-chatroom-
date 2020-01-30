@@ -42,9 +42,8 @@ var upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 
-router.post('/', function(req, res, next){req.errorDataName = [];next();} , upload.array('logo'), function (req, res, next) {
+router.post('/', function(req, res, next){req.errorDataName = [];next();} , upload.array('file'), function (req, res, next) {
   var files = req.files;
-  console.log(multer.MulterError);
   files.forEach(file => {
     console.log('檔案型別：%s', file.mimetype);
     console.log('原始檔名：%s', file.originalname);

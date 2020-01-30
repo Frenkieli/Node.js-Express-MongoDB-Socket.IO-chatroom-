@@ -68,6 +68,34 @@ function appendData(obj) {
   el.innerHTML = html.trim();
   scrollWindow();
 }
+// document.getElementById('submit').addEventListener('change',function(e){
+//   let reader = new FileReader();
+//   reader.readAsArrayBuffer();
+//   reader.onload=function(){
+//     console.log(reader);
+//   }
+// })
 
+
+document.getElementById('submit').addEventListener('click', function (e) {
+  e.preventDefault();
+  let data = new FormData();
+  let updataFile = document.getElementById("file").files;
+  let files = {};
+  for (let i = 0; i < updataFile.length; i++) {
+    files[i] = updataFile[i];
+  }
+  data.append("file", files);
+  console.log(files);
+  console.log(document.getElementById("file").files[0]);
+  axios.post('/updata', data, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  }).then(res => {
+    console.log(res);
+  })
+
+})
 
 // socket.emit('message', 'Hi! Robby');

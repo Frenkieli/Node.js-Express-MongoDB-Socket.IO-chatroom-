@@ -15,12 +15,13 @@
     <button type="button">送出</button>
   </div>
   <div>
-    <form action="/updata" method="post" enctype="multipart/form-data">
+    <form id="form" action="/updata" method="post" enctype="multipart/form-data">
       <h2>單圖上傳</h2>
-      <input type="file" name="logo" multiple>
-      <input type="submit" value="提交">
+      <input id="file" type="file" name="logo" multiple>
+      <input id="submit" type="submit" value="提交">
     </form>
   </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/zh-tw.js'></script>
