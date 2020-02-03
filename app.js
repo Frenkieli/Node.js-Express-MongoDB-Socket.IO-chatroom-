@@ -9,45 +9,12 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var updataRouter = require('./routes/updata');
 
+
 var app = express();
 
 // 聊天室功能
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
-
-const SocketHander = require('./socket/index');
-
-
-io.on('connection', async (socket) => {
-  console.log('a user connected');
-
-  // io.emit("message", 'Hello wWrld!');
-
-  // socket.on("message", (obj) => {
-  //   io.emit("message", '應聲蟲:' + obj);
-  // });
-
-  socketHander = new SocketHander();
-
-  socketHander.connect();
-
-  const history = await socketHander.getMessages();
-  const socketid = socket.id;
-  io.to(socketid).emit('history', history);
-  // io.emit('history', history);
-
-  socket.on("message", (obj) => {
-    socketHander.storeMessages(obj);
-    io.emit("message", obj);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("a user go out");
-  });
-
-});
-
-server.listen(3001);
+const socket = require('./socket/socket');
+socket.init();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -68,6 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/updata', updataRouter);
+
+app.use('/userData', express.static(__dirname + '/userData')); //提供圖片和假的位置讓網站使用
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

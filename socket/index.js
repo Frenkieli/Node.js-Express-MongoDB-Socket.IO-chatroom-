@@ -1,4 +1,4 @@
-const Messages = require('../models/Messages');
+const schemaModels = require('../models/fulls_schemaModels')
 const moment = require('moment');
 
 class SocketHander {
@@ -11,13 +11,13 @@ class SocketHander {
   }
 
   getMessages() {
-    return Messages.find();
+    return schemaModels.messages.find();
   }
 
   storeMessages(data) {
 
     console.log(data);
-    const newMessages = new Messages({
+    const newMessages = new schemaModels.messages({
       name: data.name,
       msg: data.msg,
       time: moment().valueOf(),
