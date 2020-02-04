@@ -1,4 +1,4 @@
-const schemaModels = require('../models/fulls_schemaModels')
+const schemaModels = require('../models/schemaModels')
 const moment = require('moment');
 
 class SocketHander {

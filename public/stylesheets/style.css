@@ -14,7 +14,14 @@ a {
 
 .chats .chat {
   display: flex;
-  margin: 5px 0; }
+  margin: 5px 0;
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+  .chats .chat .delete {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    cursor: pointer; }
 
 .chats .chat .group {
   display: inherit;

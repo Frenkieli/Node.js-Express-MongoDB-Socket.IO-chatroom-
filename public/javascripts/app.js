@@ -1,4 +1,22 @@
-socket = io.connect('ws://localhost:3001', { query: "name=Robby" }); //這邊到時候再改
+socket = io.connect('ws://192.168.3.125:3001', { query: "name=Robby" }); //這邊到時候再改
+
+
+
+// 方變自己使用的function
+function AE(a,b){
+  b.forEach(v=>{
+    a.appendChild(v);
+  })
+}
+function CE(a,b,c){
+  let d = document.createElement(a);
+  if(b) d.className = b;
+  if(c) d.id = c;
+  return d;
+}
+
+
+
 
 // socket.on('message', (obj) => {
 //   console.log(obj);
@@ -56,24 +74,74 @@ socket.on('popMessage', (obj) => {
   popMessage.ok(obj, 3000)
 });
 
+socket.on('deleteMessage',obj => {
+  console.log(obj);
+  document.getElementById(obj._id).remove();
+
+  popMessage.ok('資料被刪除', 3000)
+})
+
+socket.on('updateMessage',obj => {
+  let element = document.getElementById(obj._id).getElementsByClassName( 'msg' )[0];
+  element.innerHTML = '';
+  element.innerText = obj.msg;
+  popMessage.ok('資料被更新', 3000)
+})
+
+socket.on('createRecord',obj => {
+  console.log('創建結果' ,obj);
+})
+
+
+
 function appendData(obj) {
 
   let el = document.querySelector('.chats');
   let html = el.innerHTML;
-
   obj.forEach(element => {
-    html +=
-      `
-          <div class="chat">
-              <div class="group">
-                  <div class="name">${element.name}：</div>
-                  <div class="msg">${element.msg}</div>
-              </div>
-              <div class="time">${moment(element.time).fromNow()}</div>
-          </div>
-          `;
+    let chat = CE('div','chat', element._id ? element._id　:　'');
+    let push = [];
+      let group= CE('div','group');
+      push.push(group);
+        let name = CE('div','name');
+        name.innerText = element.name + '：';
+        let msg  = CE('div','msg');
+        msg.innerText = element.msg;
+        msg.addEventListener('click',function(e){
+          let edit = CE('input');
+          edit.type = 'text';
+          edit.value = e.target.innerText;
+          e.target.innerText = '';
+          e.target.appendChild(edit);
+          edit.focus();
+          edit.addEventListener('keyup',function(e){
+            e.preventDefault();
+            if (e.keyCode === 13) {
+              element.msg = edit.value;
+              socket.emit('updateMessage', element);
+              let text = edit.value;
+              edit.remove();
+              msg.innerText = text;
+            }
+          })
+        })
+      AE(group,[name,msg]);
+      let time = CE('div','time');
+      push.push(time);
+      time.innerText = moment(element.time).fromNow();
+      if(element._id){
+        let deleteMe = CE('div','delete');
+        push.push(deleteMe);
+        deleteMe.innerText = 'X';
+        deleteMe.title = '刪除這筆資訊';
+        deleteMe.addEventListener('click',function(e){
+          socket.emit('deleteMessage', element);
+        })
+      }
+    AE(chat,push);
+    AE(el,[chat]);
   });
-  el.innerHTML = html.trim();
+  // el.innerHTML = html.trim();
   scrollWindow();
 }
 // document.getElementById('submit').addEventListener('change',function(e){
@@ -83,6 +151,11 @@ function appendData(obj) {
 //     console.log(reader);
 //   }
 // })
+
+
+
+
+
 
 document.getElementById('card_delete').addEventListener('click', function (e) {
   axios.delete('/updata', { data: { deleteName: 'Mayday五月天【你不是真正的快樂You Are Not Truly Happy】MV官方完整版.mp3' }, headers: { "Authorization": "***" } }).then(res => {

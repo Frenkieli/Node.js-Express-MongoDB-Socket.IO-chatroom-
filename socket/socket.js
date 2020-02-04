@@ -10,8 +10,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server)
 
-var socketHander = require('./index')
-socketHander = new socketHander();
+var db = require('../controller/db');
 
 var index = {};
 
@@ -27,8 +26,9 @@ index.connectionSocket = async function (socket) {
 
 
 
-  socketHander.connect();
-  const history = await socketHander.getMessages();
+  // socketHander.connect();
+  // const history = await socketHander.getMessages();
+  const history = await db.findDB('messages');
   const socketid = socket.id;
   io.to(socketid).emit('history', history);
 
@@ -39,14 +39,27 @@ index.connectionSocket = async function (socket) {
     index.emitMessage('message', { name: comeInName, msg: " 默默的離開了聊天室" });
   });
 
-  socket.on("message", (obj) => {
-    index.emitMessage("message", '應聲蟲:' + obj);
+  // socket.on("message", (obj) => {
+  //   index.emitMessage("message", '應聲蟲:' + obj);
+  // });
+
+  socket.on("message", async (obj) => {
+    // socketHander.storeMessages(obj);
+    let result = await db.create('messages',obj);
+    index.emitMessage("message", result);
   });
 
-  socket.on("message", (obj) => {
-    socketHander.storeMessages(obj);
-    index.emitMessage("message", obj);
-  });
+  socket.on("deleteMessage",async (obj)=>{
+    console.log(obj);
+    let result = await db.destroy('messages',obj._id);
+    index.emitMessage("deleteMessage", result);
+  })
+
+  socket.on("updateMessage",async (obj)=>{
+    console.log(obj);
+    let result = await db.update('messages',obj._id,obj);
+    index.emitMessage("updateMessage", result);
+  })
 
 
 

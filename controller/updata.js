@@ -1,21 +1,23 @@
 // 上團檔案功能
 var fs = require('fs');
-var multer = require('multer')
+var multer = require('multer');
+var db = require('../controller/db');
 // var upload = multer({ dest: 'userData/' });
 
 
 var uploadFolder = './userData';
 
-const schemaModels = require('../models/fulls_schemaModels')
+const schemaModels = require('../models/schemaModels')
 const socket = require('../socket/socket');
 
 var index = {};
 
-index.create = function (req, res, next) {
+index.create = async function (req, res, next) {
   let data = req.body;
+  let result = await db.create('medicalRecord',data);
   // let medicalRecord = schemaModels.medicalRecord
   socket.emitMessage('popMessage', '創建按鈕');
-  res.end();
+  socket.emitMessage('createRecord', result);
 }
 
 var createFolder = function (folder) {
