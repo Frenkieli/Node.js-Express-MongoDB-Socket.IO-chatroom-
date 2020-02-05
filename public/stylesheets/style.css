@@ -1,55 +1,180 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
 
 a {
-  color: #00B7FF; }
+  color: #00B7FF;
+}
 
 .chats {
   padding: 10px 5px;
   height: 200px;
   width: 500px;
   background: #eee;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+}
 
 .chats .chat {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin: 5px 0;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
-  .chats .chat .delete {
-    position: absolute;
-    top: 0;
-    right: 5px;
-    cursor: pointer; }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chats .chat .delete {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  cursor: pointer;
+}
 
 .chats .chat .group {
   display: inherit;
-  word-wrap: normal; }
+  word-wrap: normal;
+}
 
 .chats .chat .group .name {
   padding: 0 10px;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .chats .chat .time {
   padding-left: 10px;
   font-size: 10px;
   line-height: 18px;
-  color: #aaa; }
+  color: #aaa;
+}
 
 .message {
-  margin-top: 10px; }
+  margin-top: 10px;
+}
 
 .message input {
   padding: 0 5px;
   height: 25px;
-  width: 300px; }
+  width: 300px;
+}
 
 .message input:first-child {
-  width: 80px; }
+  width: 80px;
+}
 
 .message button {
   height: 32px;
-  width: 100px; }
+  width: 100px;
+}
 
+.section_card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+}
+
+.section_card .card {
+  float: left;
+  height: 100%;
+  width: 50%;
+  overflow: auto;
+}
+
+.section_card .card .progress_info .progress_bar {
+  float: left;
+  width: calc(100% - 115px);
+  height: 20px;
+}
+
+.section_card .card .progress_info .progress_bar #progress_bar_color {
+  background-color: #fa0;
+  position: relative;
+  height: 100%;
+  width: 0;
+  max-width: 100%;
+}
+
+.section_card .card .progress_info .progress_bar #progress_bar_color .progress_bar_button {
+  position: absolute;
+  height: 100%;
+  width: 30px;
+  right: -15px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: #00B7FF solid 3px;
+  background-color: #fff;
+}
+
+.section_card .card .progress_info .progress_controls {
+  width: 100px;
+  float: right;
+}
+
+.section_card .card .progress_info #progress_time {
+  float: left;
+}
+
+.section_card .card .progress_info #progress_button {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 20px solid #333;
+  float: right;
+}
+
+.section_card .card .progress_info::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.section_card #view {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 50%;
+}
+
+.section_card #view.type1 .view_obj {
+  position: absolute;
+}
+
+.section_card #view.type1 .view_obj img {
+  width: 100%;
+  vertical-align: middle;
+}
+
+.section_card #view.type1 .view_obj video {
+  width: 100%;
+  vertical-align: middle;
+}
+
+.section_card #view.type1 .pick {
+  outline: 3px solid royalblue;
+}
+
+.section_card #view.type1 #obj1 {
+  max-width: 50%;
+  top: 0;
+  left: 0;
+}
+
+.section_card #view.type1 #obj2 {
+  max-width: 100%;
+  top: 50%;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.section_card #view.type1 #obj3 {
+  max-width: 50%;
+  right: 0;
+  bottom: 0;
+}
 /*# sourceMappingURL=style.css.map */

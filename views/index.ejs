@@ -15,32 +15,65 @@
     <input id="msg" type="text" placeholder="input the message" />
     <button type="button">送出</button>
   </div>
-  <div class="card">
-    <select name="cardList" id="card_list">
-      <option value="new">新的卡片</option>
-    </select>
-    號碼:<input type="text" name="cardNo" id="card_number">
-    名稱:<input type="text" name="cardName" id="card_name">
-    <button id="card_create">創建</button>
-    <div class="card_music">
-      <p>音樂<select name="card_music_list" id="card_music_list"></select></p>
+  <section class="section_card">
+    <div class="card">
+      <select name="cardList" id="card_list">
+        <option value="new">新的卡片</option>
+        <% medicalRecord.forEach(value => { %>
+          <option value="<%- value._id %>"><%- value._id %> - <%- value.name %></option>
+        <% }); %>
+      </select>
+      號碼:<input type="text" name="cardNo" id="card_number">
+      名稱:<input type="text" name="cardName" id="card_name">
+      <button id="card_create">創建</button>
+      <br>
+      <input type="number" name="view_section_time" id="view_section_time" placeholder="時間">
+      <button id="view_section_create">建立一屏</button>
+      <select name="view_section_pick" id="view_section_pick"></select>
+      <button id="view_section_edit">編輯完成</button>
+      <div class="progress_info">
+        <div class="progress_bar">
+          <div id="progress_bar_color">
+            <div class="progress_bar_button" id="progress_bar_button"></div>
+          </div>
+        </div>
+        <div class="progress_controls">
+          <div id="progress_time"></div>
+          <div id="progress_button"></div>
+        </div>
+      </div>
+      <div class="card_music">
+        <p>音樂<select name="card_music_list" id="card_music_list"></select></p>
+      </div>
+      <div class="card_video">
+        <p>影片<select name="card_video_list" id="card_video_list"></select><button id="card_video_button">插入</button></p>
+      </div>
+      <div class="card_img">
+        <p>圖片<select name="card_img_list" id="card_img_list"></select><button id="card_img_button">插入</button></p>
+      </div>
+      <button class="card_submit">確定</button><button class="card_reset">重置</button>
+      <button id="card_delete">測試用刪除按鈕</button>
+      <div>
+        <form id="form" action="/updata" method="post" enctype="multipart/form-data">
+          <h2>上傳檔案</h2>
+          <input id="file" type="file" name="logo" multiple>
+          <input id="submit" type="submit" value="提交">
+        </form>
+      </div>
     </div>
-    <div class="card_video">
-      <p>影片<select name="card_video_list" id="card_video_list"></select></p>
+    <div id="view" class="type1">
+      <div id="obj1" class="view_obj">
+        <img src="./images/imgobj.svg">
+      </div>
+      <div id="obj2" class="view_obj">
+        <img src="./images/imgobj.svg">
+      </div>
+      <div id="obj3" class="view_obj">
+        <img src="./images/imgobj.svg">
+      </div>
+
     </div>
-    <div class="card_img">
-      <p>圖片<select name="card_img_list" id="card_img_list"></select></p>
-    </div>
-    <button class="card_submit">確定</button><button class="card_reset">重置</button>
-  </div>
-  <button id="card_delete">測試用刪除按鈕</button>
-  <div>
-    <form id="form" action="/updata" method="post" enctype="multipart/form-data">
-      <h2>上傳檔案</h2>
-      <input id="file" type="file" name="logo" multiple>
-      <input id="submit" type="submit" value="提交">
-    </form>
-  </div>
+  </section>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js'></script>

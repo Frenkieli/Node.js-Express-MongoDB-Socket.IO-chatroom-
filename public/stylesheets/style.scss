@@ -64,3 +64,99 @@ a {
   height: 32px;
   width: 100px;
 }
+.section_card{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  .card{
+    float: left;
+    height: 100%;
+    width: 50%;
+    overflow: auto;
+    .progress_info{
+      .progress_bar{
+        float: left;
+        width: calc(100% - 115px);
+        height: 20px;
+        #progress_bar_color{
+          background-color: #fa0;
+          position: relative;
+          height: 100%;
+          width: 0;
+          max-width: 100%;
+          .progress_bar_button{
+            position: absolute;
+            height: 100%;
+            width: 30px;
+            right: -15px;
+            box-sizing: border-box;
+            border: #00B7FF solid 3px;
+            background-color: #fff;
+          }
+        }
+      }
+      .progress_controls{
+        width: 100px;
+        float: right;
+      }
+      #progress_time{
+        float: left;
+      }
+      #progress_button{
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 20px solid #333;
+        float: right;
+      }
+      &::after{
+        content: '';
+        display: block;
+        clear: both;
+      }
+    }
+  }
+  #view{
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 50%;
+    &.type1{
+      .view_obj{
+        position: absolute;
+        img{
+          width: 100%;
+          vertical-align: middle;
+        }
+        video{
+          width: 100%;
+          vertical-align: middle;
+        }
+      }
+      .pick{
+        outline: 3px solid royalblue;
+      }
+      #obj1{
+        max-width: 50%;
+        top: 0;
+        left: 0;
+      }
+      #obj2{
+        max-width: 100%;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+      }
+      #obj3{
+        max-width: 50%;
+        right: 0;
+        bottom: 0;
+      }
+    }
+  }
+}

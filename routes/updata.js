@@ -6,7 +6,7 @@ var controller = require('../controller/updata')
 router.put('/',
 controller.create)
 
-router.post('/',
+router.post('/:id',
   controller.updata1,
   controller.updata2,
   controller.updata3);
@@ -16,9 +16,6 @@ router.delete('/',
   controller.delete);
 
 
-router.get('/', function (req, res, next) {
-  var form = fs.readFileSync('./index.html', { encoding: 'utf8' });
-  res.send(form);
-});
+router.get('/:id', controller.read);
 
 module.exports = router;

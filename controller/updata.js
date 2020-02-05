@@ -5,7 +5,8 @@ var db = require('../controller/db');
 // var upload = multer({ dest: 'userData/' });
 
 
-var uploadFolder = './userData';
+var rootFolder = './userData';
+var uploadFolder;
 
 const schemaModels = require('../models/schemaModels')
 const socket = require('../socket/socket');
@@ -27,7 +28,7 @@ var createFolder = function (folder) {
     fs.mkdirSync(folder);
   }
 };
-createFolder(uploadFolder);
+createFolder(rootFolder);
 
 
 var storage = multer.diskStorage({
@@ -67,6 +68,7 @@ index.updata1 = function (req, res, next) {
     music: [],
     video: []
   };
+  uploadFolder = rootFolder + '/' + req.params.id;
   createFolder(uploadFolder);
   next();
 }
@@ -100,6 +102,13 @@ function deleteall(path, dataName) {
   //   fs.rmdirSync(path);
   // }
 };
+
+index.read = function (req, res, next) {
+  let id = req.params.id;
+  // var form = fs.readFileSync('./index.html', { encoding: 'utf8' });
+  files = fs.readdirSync('./userData/' + id);
+  res.send(files);
+}
 
 index.delete = function (req, res, next) {
   let data = req.body.deleteName;
