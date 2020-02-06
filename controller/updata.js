@@ -105,9 +105,13 @@ function deleteall(path, dataName) {
 
 index.read = function (req, res, next) {
   let id = req.params.id;
+  if(fs.existsSync('./userData/' + id)){
+    files = fs.readdirSync('./userData/' + id);
+    res.send(files);
+  }else{
+    res.send(false);
+  }
   // var form = fs.readFileSync('./index.html', { encoding: 'utf8' });
-  files = fs.readdirSync('./userData/' + id);
-  res.send(files);
 }
 
 index.delete = function (req, res, next) {

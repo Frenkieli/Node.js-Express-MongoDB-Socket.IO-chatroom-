@@ -125,6 +125,9 @@ a {
     float: left;
     height: 100%;
     width: 50%;
+    .pick{
+      outline: 3px solid royalblue;
+    }
     &.type1{
       .view_obj{
         position: absolute;
@@ -136,9 +139,6 @@ a {
           width: 100%;
           vertical-align: middle;
         }
-      }
-      .pick{
-        outline: 3px solid royalblue;
       }
       #obj1{
         max-width: 50%;
@@ -156,6 +156,12 @@ a {
         max-width: 50%;
         right: 0;
         bottom: 0;
+      }
+    }
+    &.type2{
+      #obj1{
+        width: 100%;
+        height: 100%;
       }
     }
   }

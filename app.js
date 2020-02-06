@@ -8,6 +8,7 @@ var sassMiddleware = require('node-sass-middleware');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var updataRouter = require('./routes/updata');
+var medicalrecordsRouter = require('./routes/medicalrecords');
 
 
 var app = express();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/updata', updataRouter);
+app.use('/medicalrecords', medicalrecordsRouter);
 
 app.use('/userData', express.static(__dirname + '/userData')); //提供圖片和假的位置讓網站使用
 

@@ -16,9 +16,15 @@ exports.create = function (collectionName, inserObject) {
   })
 }
 
-// R
+// R 搜尋編號治療
 exports.findDB = function (collectionName) {
   return schemaModels[collectionName].find().sort('time'); //可以加正負號 -號是小的在前
+}
+
+// R one
+
+exports.findOneDB = function (collectionName,id) {
+  return schemaModels[collectionName].findById(id).sort('time'); //可以加正負號 -號是小的在前
 }
 
 //U

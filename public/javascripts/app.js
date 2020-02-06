@@ -157,27 +157,41 @@ function appendData(obj) {
 
 document.getElementById('card_list').addEventListener('change',async function(e){
   let result = await axios.get('/updata/' + e.target.value);
+  let medicalrecordsResule = await axios.get('/medicalrecords/' + e.target.value);
+  playList = medicalrecordsResule.data.playlist;
+  playListTime = [];
+  total = 0;
+  nowTime = 0;
+  playList.forEach((v,i) => {
+    playListTime.push(v.time);
+    total += v.time * 1;
+    document.getElementById('view_section_pick').add(new Option('No.' + (i + 1) + '-' + v.time, i))
+  });
+  viewSectionChange(0);
   let data = {
     img:[],
     video:[],
     music:[]
   };
-  result.data.forEach(v=>{
-    let inData = v.split('.');
-    switch (inData[inData.length - 1]) {
-      case ('jpg'||'jpeg'||'png'):
-        data.img.push(v);
-        break;
-        case ('mp4'||'ogg'):
-          data.video.push(v);
-        break;
-      case ('mp3'):
-        data.music.push(v);
-        break;
-      default:
-        break;
-    }
-  })
+  if(result.data){
+    result.data.forEach(v=>{
+      let inData = v.split('.');
+      switch (inData[inData.length - 1]) {
+        case ('jpg'||'jpeg'||'png'):
+          data.img.push(v);
+          break;
+          case ('mp4'||'ogg'):
+            data.video.push(v);
+          break;
+        case ('mp3'):
+          data.music.push(v);
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   console.log(data);
   appendRecord(data, url + e.target.value + '/')
 })
@@ -214,14 +228,14 @@ document.getElementById('submit').addEventListener('click', function (e) {
   // data.append("logo", updataFile);
   // console.log(files);
   // console.log(document.getElementById("file").files[0]);
-  axios.post('/updata/1234567890', data, {
+  axios.post('/updata/' + document.getElementById('card_list').value, data, {
     headers: {
       "Content-Type": "multipart/form-data"
     }
   }).then(res => {
     console.log(res);
     res = res.data.okDataName;
-    appendRecord(res, url + '1234567890/')
+    appendRecord(res, url + document.getElementById('card_list').value + '/')
     // appendImg(res.img, url + '1234567890/');
     // res.img.forEach((v, i) => {
       //   if (i == 0 && document.getElementsByTagName('img').length == 0) {
@@ -315,17 +329,65 @@ function appendVideo(data, url){
   })
 }
 
-let view_obj = document.getElementsByClassName('view_obj');
-for(let i = 0 ; i<view_obj.length;i++){
-  view_obj[i].addEventListener('click',function(e){
-    for(let i = 0 ; i<view_obj.length;i++){
-      view_obj[i].classList.remove('pick');
+
+function viewSectionBuild (type){
+  let view = document.getElementById('view');
+  view.innerHTML = '';
+  let array=[];
+  function objBuild(i){
+    let element = CE('div','view_obj');
+    if(i==1){
+      element.classList.add('pick');
     }
-    view_obj[i].classList.add('pick');
-  })
+    element.id = 'obj' + i ;
+    let img = CE('img');
+    img.src = './images/imgobj.svg';
+    AE(element,[img]);
+    return element;
+  }
+  switch (type ? type : document.getElementById('view_section_type').value) {
+    case '0':
+      view.className = 'type1';
+      for(let i=1 ; i <= 3 ; i++){
+        array.push(objBuild(i));
+      }
+      break;
+      case '1':
+        view.className = 'type2';
+        array.push(objBuild(1));
+        break;
+    default:
+      console.log('失敗',document.getElementById('view_section_type').value)
+      break;
+  }
+  array.forEach(element => {
+    element.addEventListener('click',function(e){
+      for(let i = 0 ; i < array.length;i++){
+        array[i].classList.remove('pick');
+      }
+      element.classList.add('pick');
+    })
+  });
+  AE(view,array)
 }
 
+// document.getElementById('view_section_type').addEventListener('change',viewSectionBuild)
+
+
+// let view_obj = document.getElementsByClassName('view_obj');
+// for(let i = 0 ; i<view_obj.length;i++){
+//   view_obj[i].addEventListener('click',function(e){
+//     for(let i = 0 ; i<view_obj.length;i++){
+//       view_obj[i].classList.remove('pick');
+//     }
+//     view_obj[i].classList.add('pick');
+//   })
+// }
+
 document.getElementById('card_video_button').addEventListener('click',function(e){
+  let obj = document.querySelector('.view_obj.pick').id;
+  console.log(playList[document.getElementById('view_section_pick').value]);
+  playList[document.getElementById('view_section_pick').value][obj] = document.getElementById('card_video_now').querySelector('source').src;
   let element = document.querySelector('.view_obj.pick');
   element.innerHTML = '';
   let video = document.getElementById('card_video_now').cloneNode(true);
@@ -333,6 +395,8 @@ document.getElementById('card_video_button').addEventListener('click',function(e
   element.appendChild(video);
 })
 document.getElementById('card_img_button').addEventListener('click',function(e){
+  let obj = document.querySelector('.view_obj.pick').id;
+  playList[document.getElementById('view_section_pick').value][obj] = document.getElementById('card_img_now').src;
   let element = document.querySelector('.view_obj.pick');
   element.innerHTML = '';
   element.appendChild(document.getElementById('card_img_now').cloneNode(true));
@@ -341,18 +405,18 @@ document.getElementById('card_img_button').addEventListener('click',function(e){
 let videoPlayStatus = false;
 let playStatus;
 document.getElementById('progress_button').addEventListener('click',function(e){
-  // let video = document.getElementById('view').getElementsByTagName('video');
-  // if(videoPlayStatus){
-  //   videoPlayStatus = false;
-  //   for(let i = 0;i<video.length;i++){
-  //     video[i].pause();
-  //   }
-  // }else{
-  //   videoPlayStatus = true;
-  //   for(let i = 0;i<video.length;i++){
-  //     video[i].play();
-  //   }
-  // }
+  let video = document.getElementById('view').getElementsByTagName('video');
+  if(videoPlayStatus){
+    videoPlayStatus = false;
+    for(let i = 0;i<video.length;i++){
+      video[i].pause();
+    }
+  }else{
+    videoPlayStatus = true;
+    for(let i = 0;i<video.length;i++){
+      video[i].play();
+    }
+  }
   if(playStatus){
     clearInterval(playStatus);
     playStatus = false;
@@ -366,7 +430,7 @@ document.getElementById('progress_button').addEventListener('click',function(e){
         playStatus = false;
         return;
       }
-      // console.log({nowTime,result,total} , 3/3)
+      console.log({nowTime,result,total} , 3/3)
       document.getElementById('progress_bar_color').style.width = result * 100  + '%';
       progressCalc();
     }, 100);
@@ -377,6 +441,8 @@ let playList =[];
 let playListTime =[];
 let total = 0;
 let nowTime =0;
+
+
 function countProgressTime (){
   total = 0;
   playListTime = [];
@@ -393,15 +459,20 @@ function countProgressTime (){
     view_section_pick.add(option);
   })
 }
+
 document.getElementById('view_section_create').addEventListener('click',function(e){
   let data = {
+    type:document.getElementById('view_section_type').value,
     time:document.getElementById('view_section_time').value
   }
   playList.push(data);
+  viewSectionBuild();
   countProgressTime();
 });
-document.getElementById('view_section_edit');
-
+document.getElementById('view_section_edit').addEventListener('click',function(e){
+  let id = document.getElementById('card_list').value;
+  axios.post('/medicalrecords/' + id , playList)
+})
 
 
 
@@ -409,23 +480,38 @@ document.getElementById('view_section_edit');
 function mouseProgressmove(e){
   e.preventDefault();
   document.getElementById('progress_bar_color').style.width = document.getElementById('progress_bar_color').offsetWidth + e.movementX +'px';
-  progressCalc();
+  progressCalc(true);
 }
-function progressCalc(){
+let check = -1;
+function progressCalc(changeNowTime){
   let box = document.getElementsByClassName('progress_bar')[0].offsetWidth;
   let progress = document.getElementById('progress_bar_color').offsetWidth;
   let result = progress / box;
   let time = 0;
+  let view_section_pick = document.getElementById('view_section_pick');
   for(let i =0 ;i < playListTime.length;i++){
-      time += playListTime[i] * 1 ;
-      if(time > (total * result)){
-        // console.log(i);
-        document.getElementById('view_section_pick').options[i].selected = true ;
-        viewChange(i);
-        break;
-      }
+    time += playListTime[i] * 1 ;
+    console.log({total , result, time});
+    if(time > (total * result) ){
+      view_section_pick.options[i].selected = true ;
+      viewChange(i);
+      viewSectionChange(i);
+      break;
+    }
   }
-  nowTime = total * result;
+  if(changeNowTime){
+    nowTime = total * result;
+    let video = document.getElementById('view').getElementsByTagName('video');
+    let currentPlayListTime=0;
+    for(let i = 0 ; i < view_section_pick.value ; i++){
+      currentPlayListTime += playListTime[i] *1
+    }
+      
+    for(let i =0 ; i <video.length;i++){
+      
+      video[i].currentTime = nowTime * 1 - currentPlayListTime * 1;
+    }
+  };
   // console.log(nowTime)
 }
 document.getElementById('progress_bar_button').addEventListener('mousedown',function(e){
@@ -440,7 +526,65 @@ document.addEventListener('mouseleave',function(e){
 
 document.getElementById('view_section_pick').addEventListener('change',function(e){
   viewChange(e.target.value);
+  viewSectionChange(e.target.value);
 })
+
+function viewItemBuild(data){
+  let type = data.split('.')[data.split('.').length - 1];
+  let element;
+  switch (type) {
+    case ('jpg'||'jpeg'||'png'):
+        element = document.createElement('img');
+        element.src = data;
+      break;
+      case ('mp4'||'ogg'):
+        element = document.createElement('video');
+        let source = document.createElement('source');
+        source.src = data;
+        if(videoPlayStatus){
+          element.autoplay = true;
+        }
+        source.type = "video/" + type;
+        element.appendChild(source);
+      break;
+    default:
+      break;
+  }
+  return element;
+}
+let nowPrintData;
+function viewSectionChange(i){
+  let printData = playList[i];
+  if(nowPrintData != printData){
+    nowPrintData = printData;
+    console.log(playList);
+    viewSectionBuild(printData.type);
+    setTimeout(() => {
+      console.log(printData,'這是什麼阿');
+      switch (printData.type) {
+        case '0':
+          for(let i = 1 ; i <= 3 ; i++){
+            if(printData['obj' + i]){
+              document.getElementById('obj'+ i ).innerHTML = '';
+              let element = viewItemBuild(printData['obj' + i]);
+              document.getElementById('obj'+ i ).appendChild(element);
+            }
+          }
+          break;
+        case '1':
+          if(printData['obj1']){
+            document.getElementById('obj1').innerHTML = '';
+            let element = viewItemBuild(printData['obj1']);
+            document.getElementById('obj1').appendChild(element);
+          }
+          break;
+        default:
+          break;
+      }
+    }, 0);
+  }
+}
+
 
 let viewNow = -1;
 function viewChange(index){
